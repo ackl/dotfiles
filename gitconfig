@@ -1,0 +1,16 @@
+[user]
+	email = contact@ackl.me
+	name = Andrew Low
+[alias]
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
+  s = status
+  c = commit
+  cm = commit -m
+  ch = checkout
+  a = add
+  b = branch -a
+  d = diff
+  dc = diff --cached
+  ls = ls-files
+  ls-ignored = ls-files -o -i --exclude-standard
