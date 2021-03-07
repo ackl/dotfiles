@@ -19,6 +19,8 @@ Plugin 'ap/vim-buftabline'
 Plugin 'rbgrouleff/bclose.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'mattn/emmet-vim'
+Plugin 'yuezk/vim-js'
+Plugin 'maxmellon/vim-jsx-pretty'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
