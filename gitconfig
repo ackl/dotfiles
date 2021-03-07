@@ -7,10 +7,11 @@
   s = status
   c = commit
   cm = commit -m
-  ch = checkout
+  co = checkout
   a = add
   b = branch -a
   d = diff
+  r = reset
   dc = diff --cached
   ls = ls-files
   ls-ignored = ls-files -o -i --exclude-standard
