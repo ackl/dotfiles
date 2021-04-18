@@ -1,43 +1,31 @@
+" need to create a .vim/plugged dir
+" ensure plug.vim is installed into .vim/autoload/
+call plug#begin('~/.vim/plugged')
+
+Plug 'sainnhe/sonokai'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-surround'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'ap/vim-buftabline'
+Plug 'rbgrouleff/bclose.vim'
+Plug 'scrooloose/nerdcommenter'
+Plug 'mattn/emmet-vim'
+Plug 'yuezk/vim-js'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'kevinoid/vim-jsonc'
+Plug 'tpope/vim-fugitive'
+
+call plug#end()
+
+let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
+
 set nocompatible              " be iMproved, required
 filetype off                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub rep
-Plugin 'scrooloose/nerdtree'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'ap/vim-buftabline'
-Plugin 'rbgrouleff/bclose.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'mattn/emmet-vim'
-Plugin 'yuezk/vim-js'
-Plugin 'maxmellon/vim-jsx-pretty'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
-
 
 map <C-n> :NERDTreeToggle<CR>
 
@@ -71,7 +59,6 @@ set noshiftround
 set scrolloff=3
 set backspace=indent,eol,start
 set matchpairs+=<:> " use % to jump between pairs
-runtime! macros/matchit.vim
 
 " Move up/down editor lines
 nnoremap j gj
@@ -80,6 +67,7 @@ nnoremap k gk
 set hidden " Allow hidden buffers
 
 set ttyfast " Rendering
+set updatetime=300
 
 set laststatus=2 " Status bar
 
@@ -116,17 +104,15 @@ set listchars=tab:▸\ ,eol:¬
 " Or use your leader key + l to toggle on/off
 map <leader>l :set list!<CR> " Toggle tabs and EOL
 
-" Color scheme (terminal)
 set t_Co=256
 set background=dark
-let g:solarized_termcolors=256
-let g:solarized_termtrans=1
-" put https://raw.github.com/altercation/vim-colors-solarized/master/colors/solarized.vim
-" in ~/.vim/colors/ and uncomment:
-" colorscheme solarized
+let g:sonokai_transparent_background = 1
+let g:sonokai_disable_italic_comment = 1
+colorscheme sonokai
+hi Normal guibg=NONE ctermbg=NONE
 
 nnoremap <leader>v :vsp<CR>
-nnoremap <leader>p :sp<CR>
+nnoremap <leader>s :sp<CR>
 
 " Easier split navigation
 nnoremap <C-J> <C-W><C-J>
@@ -149,4 +135,77 @@ nnoremap <silent> <leader>q :Bclose<CR>
 
 vnoremap <C-C> :w !xclip -i -sel c<CR><CR>
 
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
+call system('mkdir ' . '~/.vim/undodir')
 set undodir=~/.vim/undodir
+set undofile
+
+set nofixendofline
+
+hi! CocErrorSign guifg=#d1666a
+hi! CocInfoSign guibg=#353b45
+hi! CocWarningSign guifg=#d1cd66
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Press F12 to fix syntax highlighting when vim screws it up
+noremap <F12> <Esc>:syntax sync fromstart<CR>
+inoremap <F12> <C-o>:syntax sync fromstart<CR>
+
+
+" Gets the root of the Git repo or submodule, relative to the current buffer
+function! GetGitRoot()
+  return systemlist('git -C ' . shellescape(expand('%:p:h')) . ' rev-parse --show-toplevel')[0]
+endfunction
+
+" AgIn: Start ag in the specified directory
+"
+" e.g.
+"   :AgIn .. foo
+function! s:ag_in(bang, ...)
+  let start_dir=expand(a:1)
+
+  if !isdirectory(start_dir)
+    throw 'not a valid directory: ' .. start_dir
+  endif
+  " Press `?' to enable preview window.
+  call fzf#vim#ag(join(a:000[1:], ' '), fzf#vim#with_preview({'dir': start_dir}, 'up:50%:hidden', '?'), a:bang)
+
+endfunction
+
+command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
+
+" Search by file name
+nmap <C-p> :Files `=GetGitRoot()`<cr>
+" Search by file content
+nmap <leader>a :AgIn  `=GetGitRoot()`<cr>
