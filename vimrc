@@ -1,5 +1,3 @@
-" need to create a .vim/plugged dir
-" ensure plug.vim is installed into .vim/autoload/
 call plug#begin('~/.vim/plugged')
 
 Plug 'sainnhe/sonokai'
@@ -26,6 +24,10 @@ let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
+
+set wildignore+=*.pyc,*.o,*.swp,*.DS_Store
+
+let NERDTreeRespectWildIgnore=1
 
 map <C-n> :NERDTreeToggle<CR>
 
