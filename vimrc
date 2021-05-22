@@ -17,10 +17,11 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'kevinoid/vim-jsonc'
 Plug 'tpope/vim-fugitive'
+Plug 'jxnblk/vim-mdx-js'
 
 call plug#end()
 
-let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
+let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier', 'coc-rust-analyzer']
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -183,6 +184,9 @@ endfunction
 " Press F12 to fix syntax highlighting when vim screws it up
 noremap <F12> <Esc>:syntax sync fromstart<CR>
 inoremap <F12> <C-o>:syntax sync fromstart<CR>
+
+" Press ESC twice to clear highlights and ballooneval
+nnoremap <silent> <ESC><ESC> :nohlsearch \| match none \| 2match none \| call coc#float#close_all()<CR>
 
 
 " Gets the root of the Git repo or submodule, relative to the current buffer
