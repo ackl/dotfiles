@@ -1,7 +1,7 @@
 call plug#begin('~/.vim/plugged')
 
 Plug 'sainnhe/sonokai'
-Plug 'scrooloose/nerdtree'
+Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
@@ -17,11 +17,13 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'kevinoid/vim-jsonc'
 Plug 'tpope/vim-fugitive'
-Plug 'jxnblk/vim-mdx-js'
+Plug 'jparise/vim-graphql'
+Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
 
 call plug#end()
 
-let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier', 'coc-rust-analyzer']
+let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
+let g:coc_node_path = '/opt/homebrew/opt/node@14/bin/node'
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -30,7 +32,10 @@ set wildignore+=*.pyc,*.o,*.swp,*.DS_Store
 
 let NERDTreeRespectWildIgnore=1
 
-map <C-n> :NERDTreeToggle<CR>
+let g:chadtree_settings = { 'theme.text_colour_set': 'solarized_dark', 'keymap.change_focus': ['B'] }
+
+
+map <C-n> :CHADopen<CR>
 
 
 syntax on
@@ -52,9 +57,9 @@ set encoding=utf-8
 set wrap
 set textwidth=79
 set formatoptions=tcqrn1
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
 set expandtab
 set noshiftround
 
@@ -90,16 +95,6 @@ set smartcase
 set showmatch
 map <leader><space> :let @/=''<cr> " clear search
 
-" Remap help key.
-inoremap <F1> <ESC>:set invfullscreen<CR>a
-nnoremap <F1> :set invfullscreen<CR>
-vnoremap <F1> :set invfullscreen<CR>
-
-" Textmate holdouts
-
-" Formatting
-map <leader>q gqip
-
 " Visualize tabs and newlines
 set listchars=tab:▸\ ,eol:¬
 " Uncomment this to enable by default:
@@ -108,11 +103,20 @@ set listchars=tab:▸\ ,eol:¬
 map <leader>l :set list!<CR> " Toggle tabs and EOL
 
 set t_Co=256
-set background=dark
-let g:sonokai_transparent_background = 1
-let g:sonokai_disable_italic_comment = 1
-colorscheme sonokai
-hi Normal guibg=NONE ctermbg=NONE
+
+if has("gui_vimr")
+    set background=dark
+    colorscheme sonokai
+else
+    if has("termguicolors")
+        set termguicolors
+    endif
+    set background=dark
+    colorscheme sonokai
+    let g:sonokai_transparent_background = 1
+    let g:sonokai_disable_italic_comment = 1
+    hi Normal guibg=NONE ctermbg=NONE
+endif
 
 nnoremap <leader>v :vsp<CR>
 nnoremap <leader>s :sp<CR>
@@ -134,7 +138,7 @@ nnoremap <leader>l :bnext<CR>
 nnoremap <leader>h :bprev<CR>
 
 let g:bclose_no_plugin_map="true"
-nnoremap <silent> <leader>q :Bclose<CR>
+nnoremap <silent> <leader>q :bd<CR>
 
 vnoremap <C-C> :w !xclip -i -sel c<CR><CR>
 
@@ -185,9 +189,8 @@ endfunction
 noremap <F12> <Esc>:syntax sync fromstart<CR>
 inoremap <F12> <C-o>:syntax sync fromstart<CR>
 
-" Press ESC twice to clear highlights and ballooneval
-nnoremap <silent> <ESC><ESC> :nohlsearch \| match none \| 2match none \| call coc#float#close_all()<CR>
 
+nnoremap <silent> <ESC><ESC> :nohlsearch \| match none \| 2match none \| call coc#float#close_all()<CR>
 
 " Gets the root of the Git repo or submodule, relative to the current buffer
 function! GetGitRoot()
@@ -212,6 +215,9 @@ endfunction
 command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
 
 " Search by file name
-nmap <C-p> :Files `=GetGitRoot()`<cr>
+nmap <C-p> :GFiles<cr>
 " Search by file content
-nmap <leader>a :AgIn  `=GetGitRoot()`<cr>
+nmap <C-a> :AgIn  `=GetGitRoot()`<cr>
+
+" macOS copy
+vnoremap <M-c> "+y
