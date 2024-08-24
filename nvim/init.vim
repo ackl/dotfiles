@@ -1,6 +1,6 @@
 call plug#begin('~/.vim/plugged')
 
-Plug 'sainnhe/sonokai'
+Plug 'tanvirtin/monokai.nvim'
 Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 Plug 'tpope/vim-surround'
 Plug 'junegunn/fzf'
@@ -18,12 +18,12 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'kevinoid/vim-jsonc'
 Plug 'tpope/vim-fugitive'
 Plug 'jparise/vim-graphql'
-Plug 'pappasam/coc-jedi', { 'do': 'yarn install --frozen-lockfile && yarn build', 'branch': 'main' }
+Plug 'jxnblk/vim-mdx-js'
 
 call plug#end()
 
-let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier']
-let g:coc_node_path = '/opt/homebrew/opt/node@14/bin/node'
+let g:coc_global_extensions = ['coc-tsserver', 'coc-prettier', 'coc-eslint']
+let g:coc_node_path = '/home/andrew/.nvm/versions/node/v14.19.1/bin/node'
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
@@ -100,23 +100,12 @@ set listchars=tab:▸\ ,eol:¬
 " Uncomment this to enable by default:
 " set list " To enable by default
 " Or use your leader key + l to toggle on/off
-map <leader>l :set list!<CR> " Toggle tabs and EOL
+map <leader>k :set list!<CR> " Toggle tabs and EOL
 
 set t_Co=256
 
-if has("gui_vimr")
-    set background=dark
-    colorscheme sonokai
-else
-    if has("termguicolors")
-        set termguicolors
-    endif
-    set background=dark
-    colorscheme sonokai
-    let g:sonokai_transparent_background = 1
-    let g:sonokai_disable_italic_comment = 1
-    hi Normal guibg=NONE ctermbg=NONE
-endif
+colorscheme monokai_pro
+hi Normal guibg=NONE ctermbg=NONE
 
 nnoremap <leader>v :vsp<CR>
 nnoremap <leader>s :sp<CR>
@@ -140,7 +129,10 @@ nnoremap <leader>h :bprev<CR>
 let g:bclose_no_plugin_map="true"
 nnoremap <silent> <leader>q :bd<CR>
 
-vnoremap <C-C> :w !xclip -i -sel c<CR><CR>
+" macOS copy
+vnoremap <M-c> "+y
+" Linux copy
+vnoremap <C-c> "+y
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
@@ -217,7 +209,4 @@ command! -bang -nargs=+ -complete=dir AgIn call s:ag_in(<bang>0, <f-args>)
 " Search by file name
 nmap <C-p> :GFiles<cr>
 " Search by file content
-nmap <C-a> :AgIn  `=GetGitRoot()`<cr>
-
-" macOS copy
-vnoremap <M-c> "+y
+nmap <C-s> :AgIn  `=GetGitRoot()`<cr>
