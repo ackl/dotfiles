@@ -1,0 +1,16 @@
+ [opener]
+browser = [
+  { run = 'xdg-open "$@"', for = "linux",   orphan = true, desc = "Default browser" },
+  { run = 'open "$@"',     for = "macos",   orphan = true },
+  { run = 'start "" %*',   for = "windows", orphan = true },
+]
+
+edit = [
+  { run = 'nvim "$@"', block = true, desc = "Neovim" },
+]
+
+[open]
+prepend_rules = [
+  { use = "browser", mime = "text/html" },  # HTML → browser
+  { use = "edit",    mime = "text/*" },     # other text → editor
+]
