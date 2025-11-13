@@ -15,3 +15,7 @@
   dc = diff --cached
   ls = ls-files
   ls-ignored = ls-files -o -i --exclude-standard
+[pager]
+	color = true
+[core]
+	pager = less -

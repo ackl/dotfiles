@@ -1,0 +1,12 @@
+[[plugin.deps]]
+use = "Rolv-Apneseth/starship"
+rev = "a63550b"
+hash = "c2021386289a0cbb3e152a052f67c177"
+
+[[plugin.deps]]
+use = "llanosrocas/yaziline"
+rev = "e7042a8"
+hash = "9c2ab18ff5368056904e4ebb61b17571"
+
+[flavor]
+deps = []
