@@ -29,10 +29,10 @@ config_dir="${HOME}/.config"
 mkdir -p "$config_dir"
 
 config_links=(
-  ghostty
   nvim
   yazi
   git
+  kitty
 )
 
 for name in "${config_links[@]}"; do
