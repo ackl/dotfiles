@@ -25,7 +25,7 @@
 # ==========================
 # # The config file consists of simple key-value pairs,
 # # separated by equals signs.
-# font-family = Iosevka
+font-family =￼Monaco Nerd Font
 # window-padding-x = 2
 #
 # # Spacing around the equals sign does not matter.
@@ -51,6 +51,7 @@ background-opacity=0.8
 # Colors (Root Loops)
 background = 020b09
 foreground = dcf8f1
+split-divider-color = efefef
 
 # black
 palette = 0=#0d2823
@@ -83,3 +84,5 @@ palette = 14=#8cd3d2
 # white
 palette = 7=#71cdbb
 palette = 15=#dcf8f1
+
+cursor-style = block_hollow

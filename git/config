@@ -3,8 +3,9 @@
 	name = Andrew Low
 [alias]
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
-  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
+  loia = lol
   s = status
+  sf = status --name-only
   c = commit
   cm = commit -m
   co = checkout
