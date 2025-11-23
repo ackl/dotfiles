@@ -4,8 +4,8 @@ return {
     vim.g.copilot_no_tab_map = true
   end,
   config = function()
-    vim.keymap.set('i', '<C-l>', function()
-      return vim.fn['copilot#Accept'] '<CR>'
+    vim.keymap.set('i', '<Tab>', function()
+      return vim.fn['copilot#Accept'] ''
     end, { expr = true, silent = true, replace_keycodes = false })
 
     vim.keymap.set('i', '<C-j>', '<Plug>(copilot-next)')

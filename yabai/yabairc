@@ -6,10 +6,11 @@
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
 
-yabai -m signal --add app='^Ghostty$' event=window_created action='yabai -m space --layout bsp'
-yabai -m signal --add app='^Ghostty$' event=window_destroyed action='yabai -m space --layout bsp'
 yabai -m rule --add app="^Notes" manage=off sub-layer=below
 yabai -m rule --add app="^Finder" manage=off sub-layer=below
+
+yabai -m rule --add app="^Digital Colour Meter$" sticky=on
+
 
 
 # global settings
@@ -45,45 +46,10 @@ yabai -m config                                 \
     mouse_action2                resize         \
     mouse_drop_action            swap
 
-# defaults (keep your existing block at .yabairc:15-46)
-  default_top=8
-  default_bottom=8
-  default_left=8
-  default_right=8
-  default_gap=6
-
-  set_display_padding() {
-    display="$1"
-    visible="$(yabai -m query --windows --display "$display" \
-      | jq '[.[] | select(."is-visible" == true and ."is-floating" == false)] | length')"
-
-    if [ "$visible" -le 1 ]; then
-      yabai -m config --display "$display" top_padding 0
-      yabai -m config --display "$display" bottom_padding 0
-      yabai -m config --display "$display" left_padding 0
-      yabai -m config --display "$display" right_padding 0
-      yabai -m config --display "$display" window_gap 0
-    else
-      yabai -m config --display "$display" top_padding 8
-      yabai -m config --display "$display" bottom_padding8
-      yabai -m config --display "$display" left_padding 8
-      yabai -m config --display "$display" right_padding 8
-      yabai -m config --display "$display" window_gap 6
-    fi
-  }
-
-  refresh_padding() {
-    yabai -m query --displays | jq '.[].index' | while read -r display; do
-      set_display_padding "$display"
-    done
-  }
-
-refresh_padding
-
-  for evt in window_created window_destroyed window_moved window_resized \
-             window_minimized window_deminimized application_front_switched \
+  for evt in window_created window_destroyed window_moved \
+             window_minimized window_deminimized \
              space_changed display_changed; do
-    yabai -m signal --add event="$evt" action="refresh_padding"
+    yabai -m signal --add event="$evt" action="~/.config/yabai/yabai-utils.sh"
   done
 
 echo "yabai configuration loaded.."
