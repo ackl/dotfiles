@@ -5,7 +5,6 @@ set -euo pipefail
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 dotfile_links=(
-  ".yabairc:yabairc"
   ".skhdrc:skhdrc"
   ".zshrc:zshrc"
 )
@@ -33,6 +32,7 @@ config_links=(
   yazi
   git
   kitty
+  yabai
 )
 
 for name in "${config_links[@]}"; do

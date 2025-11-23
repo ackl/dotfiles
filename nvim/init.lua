@@ -35,8 +35,9 @@ vim.o.clipboard = 'unnamedplus'
 
 vim.keymap.set('n', ';', ':')
 
-vim.keymap.set('n', '<leader><leader>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
+vim.keymap.set('n', '<leader>\\', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
 vim.keymap.set('n', '<leader>q', ':bd<CR>', { desc = '[Q]uit current buffer' })
+vim.keymap.set('n', '<leader><leader>q', ':qa!<CR>', { desc = '[Q]uit all' })
 
 vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { desc = '[R]eplace word under cursor' })
@@ -57,6 +58,9 @@ vim.keymap.set('n', '<leader>s', ':sp<CR>', { desc = '[S]plit' })
 -- Nicer buffer navigation
 vim.keymap.set('n', '<leader>l', ':bnext<CR>', { desc = 'Previous buffer' })
 vim.keymap.set('n', '<leader>h', ':bprev<CR>', { desc = 'Next buffer' })
+
+vim.keymap.set('n', '<leader>ca', '<cmd>CodeCompanionActions<CR>', { desc = 'Code Companion Actions' })
+vim.keymap.set('n', '<leader>cc', '<cmd>CodeCompanionChat<CR>', { desc = 'Code Companion Chat' })
 
 --------------------------------
 -- [[ Autocommands ]]

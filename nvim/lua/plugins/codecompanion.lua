@@ -9,19 +9,6 @@ return {
     -- Test with blink.cmp (delete if not required)
     {
       'saghen/blink.cmp',
-      lazy = false,
-      version = '*',
-      opts = {
-        keymap = {
-          preset = 'enter',
-          ['<S-Tab>'] = { 'select_prev', 'fallback' },
-          ['<Tab>'] = { 'select_next', 'fallback' },
-        },
-        cmdline = { sources = { 'cmdline' } },
-        sources = {
-          default = { 'lsp', 'path', 'buffer', 'codecompanion' },
-        },
-      },
     },
     -- Test with nvim-cmp
     -- { "hrsh7th/nvim-cmp" },
@@ -34,23 +21,16 @@ return {
     ---@module "codecompanion"
     ---@type CodeCompanion.Config
     adapters = {
-      http = {
-        acp = {
-          gemini_cli = function()
-            return require('codecompanion.adapters').extend('gemini_cli', {
-              env = {
-                GEMINI_API_KEY = 'AIzaSyBTfpxATtesTLJxqKYz4I51bMH8V40rnxo',
-              },
-            })
-          end,
-        },
-        deepseek = function()
-          return require('codecompanion.adapters').extend('deepseek', {
-            env = {
-              api_key = 'cmd:op read op://personal/DeepSeek_API/credential --no-newline',
+      acp = {
+        codex = function()
+          return require('codecompanion.adapters').extend('codex', {
+            defaults = {
+              auth_method = 'chatgpt', -- "openai-api-key"|"codex-api-key"|"chatgpt"
             },
           })
         end,
+      },
+      http = {
         openrouter = function()
           return require('codecompanion.adapters').extend('openai', {
             opts = {
@@ -62,7 +42,7 @@ return {
             schema = {
               model = {
                 default = function()
-                  return 'gpt-5'
+                  return 'gpt-5.1'
                 end,
               },
             },
