@@ -26,13 +26,13 @@ return { -- Autocompletion
       dependencies = {
         -- `friendly-snippets` contains a variety of premade snippets.
         --    See the README about individual language/framework/plugin snippets:
-        --    https://github.com/rafamadriz/friendly-snippets
-        -- {
-        --   'rafamadriz/friendly-snippets',
-        --   config = function()
-        --     require('luasnip.loaders.from_vscode').lazy_load()
-        --   end,
-        -- },
+        -- https://github.com/rafamadriz/friendly-snippets
+        {
+          'rafamadriz/friendly-snippets',
+          config = function()
+            require('luasnip.loaders.from_vscode').lazy_load()
+          end,
+        },
       },
       opts = {},
     },
@@ -69,27 +69,39 @@ return { -- Autocompletion
     --   --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
     -- },
 
-    cmdline = {
-      enabled = true,
-      keymap = {
-        preset = 'cmdline',
-        ['<Tab>'] = { 'select_and_accept', 'fallback' },
-        ['<CR>'] = { 'select_and_accept', 'fallback' },
-        ['<Up>'] = false,
-        ['<Down>'] = false,
-        ['<S-Tab>'] = false,
-        ['<Right>'] = false,
-        ['<Left>'] = false,
-      },
-    },
+    -- cmdline = {
+    --   enabled = true,
+    --   keymap = {
+    --     preset = 'cmdline',
+    --     -- ['<Tab>'] = { 'select_and_accept', 'fallback' },
+    --     ['<CR>'] = { 'select_and_accept', 'fallback' },
+    --     ['<Up>'] = false,
+    --     ['<Down>'] = false,
+    --     ['<S-Tab>'] = false,
+    --     ['<Right>'] = false,
+    --     ['<Left>'] = false,
+    --   },
+    -- },
 
     keymap = {
-      preset = 'cmdline',
-      ['<Tab>'] = { 'select_and_accept', 'fallback' },
-      ['<CR>'] = { 'select_and_accept', 'fallback' },
-      ['<Up>'] = false,
-      ['<Down>'] = false,
-      ['<S-Tab>'] = false,
+      preset = 'enter',
+    },
+
+    completion = {
+      list = {
+        selection = {
+          preselect = false,
+          auto_insert = false, -- Set to true to enable
+        },
+      },
+
+      menudraw = {}
+      {
+        columns = {
+          "label", "label_description", gap = 1
+        },
+        { "kind_icon", "kind" }
+      }
     },
 
     appearance = {

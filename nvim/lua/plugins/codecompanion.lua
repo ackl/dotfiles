@@ -21,33 +21,13 @@ return {
     ---@module "codecompanion"
     ---@type CodeCompanion.Config
     adapters = {
-      acp = {
-        codex = function()
-          return require('codecompanion.adapters').extend('codex', {
-            defaults = {
-              auth_method = 'chatgpt', -- "openai-api-key"|"codex-api-key"|"chatgpt"
-            },
-          })
-        end,
-      },
-      http = {
-        openrouter = function()
-          return require('codecompanion.adapters').extend('openai', {
-            opts = {
-              stream = true,
-            },
-            env = {
-              api_key = 'REDACTED_OPENROUTER_KEY',
-            },
-            schema = {
-              model = {
-                default = function()
-                  return 'gpt-5.1'
-                end,
-              },
-            },
-          })
-        end,
+      interactions = {
+        chat = {
+          adapter = {
+            name = 'opencode',
+            model = 'gpt-5.2-codex',
+          },
+        },
       },
     },
   },

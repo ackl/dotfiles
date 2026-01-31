@@ -18,6 +18,11 @@ require('lazy').setup {
   spec = {
     { import = 'plugins' },
   },
+  performance = {
+    cache = {
+      enabled = false,
+    },
+  },
   checker = {
     enabled = true, -- check for plugin updates periodically
   },

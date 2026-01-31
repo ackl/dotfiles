@@ -5,7 +5,11 @@ return {
   end,
   config = function()
     vim.keymap.set('i', '<Tab>', function()
-      return vim.fn['copilot#Accept'] ''
+      local accepted = vim.fn['copilot#Accept'] ''
+      if accepted ~= '' then
+        return accepted
+      end
+      return '\t'
     end, { expr = true, silent = true, replace_keycodes = false })
 
     vim.keymap.set('i', '<C-j>', '<Plug>(copilot-next)')

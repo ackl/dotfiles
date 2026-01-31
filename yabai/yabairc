@@ -11,6 +11,10 @@ yabai -m rule --add app="^Finder" manage=off sub-layer=below
 
 yabai -m rule --add app="^Digital Colour Meter$" sticky=on
 
+yabai -m signal --add event=display_changed action="yabai -m config focus_follows_mouse autoraise"
+yabai -m signal --add event=space_changed action="yabai -m config focus_follows_mouse autoraise"
+yabai -m signal --add event=mission_control_exit action="yabai -m config focus_follows_mouse autoraise"
+
 
 
 # global settings
@@ -46,11 +50,11 @@ yabai -m config                                 \
     mouse_action2                resize         \
     mouse_drop_action            swap
 
-  for evt in window_created window_destroyed window_moved \
-             window_minimized window_deminimized \
-             space_changed display_changed; do
-    yabai -m signal --add event="$evt" action="~/.config/yabai/yabai-utils.sh"
-  done
-
+  # for evt in window_created window_destroyed window_moved \
+  #            window_minimized window_deminimized \
+  #            space_changed display_changed; do
+  #   yabai -m signal --add event="$evt" action="~/.config/yabai/yabai-utils.sh"
+  # donie
+  #
 echo "yabai configuration loaded.."
 

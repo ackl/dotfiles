@@ -35,11 +35,12 @@ vim.o.clipboard = 'unnamedplus'
 
 vim.keymap.set('n', ';', ':')
 
-vim.keymap.set('n', '<leader>\\', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
+vim.keymap.set('n', '<leader><leader>', '<cmd>nohlsearch<CR>', { desc = 'Clear search highlights' })
 vim.keymap.set('n', '<leader>q', ':bd<CR>', { desc = '[Q]uit current buffer' })
 vim.keymap.set('n', '<leader><leader>q', ':qa!<CR>', { desc = '[Q]uit all' })
 
-vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[R]eplace word under cursor' })
+vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = '[R]eplace word under cursor' })
 
 -- Exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })

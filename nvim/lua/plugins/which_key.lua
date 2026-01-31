@@ -1,4 +1,4 @@
-return {              -- Useful plugin to show you pending keybinds.
+return { -- Useful plugin to show you pending keybinds.
   'folke/which-key.nvim',
   event = 'VimEnter', -- Sets the loading event to 'VimEnter'
   opts = {
@@ -10,6 +10,11 @@ return {              -- Useful plugin to show you pending keybinds.
       mappings = vim.g.have_nerd_font,
       -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
       -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
+      triggers = {
+        { '<auto>', mode = 'nixsotc' },
+        { 's', mode = { 'n', 'v' } },
+      },
+
       keys = vim.g.have_nerd_font and {} or {
         Up = '<Up> ',
         Down = '<Down> ',

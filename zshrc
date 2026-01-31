@@ -66,3 +66,6 @@ alias lh='ls -lh'
 alias ll='ls -lah'
 alias ls='ls --color=tty'
 alias lsa='ls -lah'
+
+# OpenClaw Completion
+source <(openclaw completion --shell zsh)
