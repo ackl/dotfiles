@@ -4,6 +4,32 @@ set -euo pipefail
 # Resolve repository directory relative to this script.
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+update_symlink() {
+  local src="$1"
+  local target="$2"
+
+  if [[ -e "$target" || -L "$target" ]]; then
+    if [[ -d "$target" && ! -L "$target" ]]; then
+      rm -rf "$target"
+    else
+      rm -f "$target"
+    fi
+  fi
+
+  ln -sfn "$src" "$target"
+  printf 'Linked %s -> %s\n' "$target" "$src"
+}
+
+local_bin="$HOME/.local/bin"
+
+if [[ ! -d "$local_bin" ]]; then
+    mkdir -p "$local_bin"
+fi
+
+export PATH="$local_bin:$PATH"
+
+update_symlink "./yabai/yabai-restart" "$local_bin/yabai-restart"
+
 dotfile_links=(
   ".skhdrc:skhdrc"
   ".zshrc:zshrc"
@@ -43,15 +69,7 @@ for name in "${config_links[@]}"; do
     echo "Source directory not found: $src" >&2
     exit 1
   fi
-
-  if [[ -e "$target" || -L "$target" ]]; then
-    if [[ -d "$target" && ! -L "$target" ]]; then
-      rm -rf "$target"
-    else
-      rm -f "$target"
-    fi
-  fi
-
-  ln -sfn "$src" "$target"
-  printf 'Linked %s -> %s\n' "$target" "$src"
+  
+  update_symlink "$src" "$target"
 done
+

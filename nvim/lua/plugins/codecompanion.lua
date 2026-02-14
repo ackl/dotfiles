@@ -1,5 +1,3 @@
-vim.env['CODECOMPANION_TOKEN_PATH'] = vim.fn.expand '~/.config'
-
 return {
   'olimorris/codecompanion.nvim',
   dependencies = {
@@ -18,15 +16,40 @@ return {
   -- Feature will be removed in CodeCompanion v18.0.0
 
   opts = {
-    ---@module "codecompanion"
-    ---@type CodeCompanion.Config
     adapters = {
-      interactions = {
-        chat = {
-          adapter = {
-            name = 'opencode',
-            model = 'gpt-5.2-codex',
-          },
+      acp = {
+        gemini_cli = function()
+          return require('codecompanion.adapters').extend('gemini_cli', {
+            defaults = {
+              model = 'gemini-3-flash-preview',
+            },
+          })
+        end,
+      },
+    },
+    interactions = {
+      chat = {
+        adapter = 'gemini_cli',
+      },
+      roles = {
+        ---The header name for the LLM's messages
+        ---@type string|fun(adapter: CodeCompanion.HTTPAdapter|CodeCompanion.ACPAdapter): string
+        llm = function(adapter)
+          return 'CodeCompanion (' .. adapter.formatted_name .. ')'
+        end,
+
+        ---The header name for your messages
+        ---@type string
+        user = 'Me',
+      },
+      keymaps = {
+        send = {
+          modes = { n = '<CR>', i = '<C-s>' },
+          opts = {},
+        },
+        close = {
+          modes = { n = '<C-q>', i = '<C-q>' },
+          opts = {},
         },
       },
     },

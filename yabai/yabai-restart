@@ -1,0 +1,5 @@
+#!/bin/bash
+
+yabai --restart-service
+sudo yabai --load-sa
+skhd --restart-service

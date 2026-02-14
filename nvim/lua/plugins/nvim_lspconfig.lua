@@ -10,7 +10,7 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
-    { 'j-hui/fidget.nvim', opts = {} },
+    { 'j-hui/fidget.nvim',    opts = {} },
 
     -- Allows extra capabilities provided by blink.cmp
     'saghen/blink.cmp',
@@ -241,7 +241,8 @@ return {
             ['http://json.schemastore.org/ansible-stable-2.9'] = 'roles/tasks/*.{yml,yaml}',
             ['https://json.schemastore.org/dependabot-v2'] = '.github/dependabot.{yml,yaml}',
             ['https://json.schemastore.org/gitlab-ci'] = '*gitlab-ci*.{yml,yaml}',
-            ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = '*compose*.{yml,yaml}',
+            ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] =
+            '*compose*.{yml,yaml}',
           },
           capabilities = {
             textDocument = {
@@ -309,7 +310,8 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers.mason or {})
     vim.list_extend(ensure_installed, {
-      'stylua', -- Used to format Lua code
+      'stylua',  -- Used to format Lua code
+      'fixjson', -- Used to format HTML code
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -324,7 +326,7 @@ return {
 
     -- After configuring our language servers, we now enable them
     require('mason-lspconfig').setup {
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      ensure_installed = {},   -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
       automatic_enable = true, -- automatically run vim.lsp.enable() for all servers that are installed via Mason
     }
 

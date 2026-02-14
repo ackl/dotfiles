@@ -20,3 +20,5 @@
 	color = true
 [core]
 	pager = less -
+[init]
+	defaultBranch = master
