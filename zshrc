@@ -3,6 +3,7 @@
 [[ $- != *i* ]] && return
 
 # ---- oh-my-zsh -----------------------------------------------------------------
+export local_bin="$HOME/.local/bin"
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="bira"
 plugins=(git)
@@ -11,6 +12,7 @@ source "$ZSH/oh-my-zsh.sh"
 # ---- core env ------------------------------------------------------------------
 export EDITOR="nvim"
 export NVM_DIR="$HOME/.nvm"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # For compilers to find node@24.
 export LDFLAGS="-L/opt/homebrew/opt/node@24/lib"
@@ -42,12 +44,13 @@ export PNPM_HOME="$HOME/Library/pnpm"
 # Keep this order intentional: highest priority first in the final PATH.
 path_prepend "$HOME/.jenv/bin"
 path_prepend "$HOME/Library/Python/3.9/bin"
-path_prepend "/usr/local/bin"
+path_prepend "$HOME/Library/Python/3.14/bin"
 path_prepend "$HOME/bin"
 path_prepend "$PNPM_HOME"
 path_prepend "$HOME/.camber/bin"
 path_prepend "$HOME/.antigravity/antigravity/bin"
 path_prepend "/opt/homebrew/opt/node@24/bin"
+path_append "$local_bin"
 path_append "$HOME/.lmstudio/bin"
 
 # ---- lazy nvm ------------------------------------------------------------------
@@ -131,10 +134,32 @@ conda() {
   conda "$@"
 }
 
+# ---- helper -------------------------------------------------------------------
+dotfiles() {
+  cd "$HOME/lab/dotfiles/" || return
+
+  local -a files
+  if (( $# == 0 )); then
+    files=(zshrc)   # swap to .zshrc if that's your filename
+  else
+    setopt local_options null_glob
+    files=( ${(~)^@} )   # force zsh glob expansion on args
+    (( $#files )) || { print -u2 " no files matched"; return 1; }
+  fi
+
+  nvim -- "${files[@]}"
+}
+
+_dotfiles_completion() {
+  _files -W "$HOME/lab/dotfiles/"
+}
+compdef _dotfiles_completion dotfiles de dtf dfe dtfe conf
+
 # ---- aliases -------------------------------------------------------------------
 alias vim="nvim"
 alias ranger="yazi"
-alias dotfileedit="cd ~/lab/dotfiles && nvim ."
+alias {de,dtf,dfe,dtfe,conf}="dotfiles"
+
 
 alias l='ls -h'
 alias la='ls -lAh'
@@ -143,9 +168,9 @@ alias ll='ls -lah'
 alias ls='ls --color=tty'
 alias lsa='ls -lah'
 
-alias tailscale='/Applications/Tailscale.app/Contents/MacOS/Tailscale'
 alias zellij='/Applications/zellij'
 alias tmux='zellij'
+alias {um,umm,urm,uhh,uh,hmm,hmm,ehh,uhhh,idk}='navi'
 
 # ---- completions ---------------------------------------------------------------
 [[ -r "$HOME/.openclaw/completions/openclaw.zsh" ]] && source "$HOME/.openclaw/completions/openclaw.zsh"
@@ -154,3 +179,5 @@ alias tmux='zellij'
 export PATH="$PATH:/Users/andrew/.lmstudio/bin"
 # End of LM Studio CLI section
 
+# OpenClaw Completion
+source "/Users/andrew/.openclaw/completions/openclaw.zsh"

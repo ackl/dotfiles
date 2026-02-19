@@ -39,8 +39,7 @@ vim.keymap.set('n', '<leader><leader>', '<cmd>nohlsearch<CR>', { desc = 'Clear s
 vim.keymap.set('n', '<leader>q', ':bd<CR>', { desc = '[Q]uit current buffer' })
 vim.keymap.set('n', '<leader><leader>q', ':qa!<CR>', { desc = '[Q]uit all' })
 
-vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-  { desc = '[R]eplace word under cursor' })
+vim.keymap.set('n', '<leader>r', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = '[R]eplace word under cursor' })
 
 -- Exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
@@ -58,9 +57,6 @@ vim.keymap.set('n', '<leader>s', ':sp<CR>', { desc = '[S]plit' })
 -- Nicer buffer navigation
 vim.keymap.set('n', '<leader>l', ':bnext<CR>', { desc = 'Previous buffer' })
 vim.keymap.set('n', '<leader>h', ':bprev<CR>', { desc = 'Next buffer' })
-
-vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<cmd>CodeCompanionActions<CR>', { desc = 'Code Companion Actions' })
-vim.keymap.set({ 'n', 'v' }, '<leader>cc', '<cmd>CodeCompanionChat<CR>', { desc = 'Code Companion Chat' })
 
 --------------------------------
 -- [[ Autocommands ]]

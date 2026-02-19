@@ -1,5 +1,5 @@
-#!/bin/bash
-
-yabai --restart-service
+#!/bin/zsh
+yabai --restart-service > /dev/null 2>&1
 sudo yabai --load-sa
-skhd --restart-service
+
+skhd --restart-service > /dev/null 2>&1

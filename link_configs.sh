@@ -21,14 +21,11 @@ update_symlink() {
 }
 
 local_bin="$HOME/.local/bin"
-
 if [[ ! -d "$local_bin" ]]; then
     mkdir -p "$local_bin"
 fi
 
-export PATH="$local_bin:$PATH"
-
-update_symlink "./yabai/yabai-restart" "$local_bin/yabai-restart"
+update_symlink "${repo_dir}/yabai/yabai-restart" "$local_bin/yabai-restart"
 
 dotfile_links=(
   ".skhdrc:skhdrc"
