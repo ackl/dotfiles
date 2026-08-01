@@ -14,28 +14,22 @@ return {
   },
   opts = {
     notify_on_error = false,
-    format_on_save = function(bufnr)
-      return {
-        timeout_ms = 250,
-        lsp_format = 'fallback',
-      }
-    end,
+    format_on_save = {
+      timeout_ms = 1000,
+      lsp_format = 'fallback',
+    },
     formatters_by_ft = {
       lua = { 'stylua' },
       html = { 'htmlbeautifier' },
       json = { 'fixjson' },
-
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      --
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      javascript = { 'prettier' },
+      javascriptreact = { 'prettier' },
+      typescript = { 'prettier' },
+      typescriptreact = { 'prettier' },
     },
-  },
-  formatters = {
-    prettier = {
-      prepend_args = function()
-        return {
+    formatters = {
+      prettier = {
+        prepend_args = {
           '--tab-width',
           '2',
           '--no-semi',
@@ -45,8 +39,8 @@ return {
           '80',
           '--config-precedence',
           'prefer-file',
-        }
-      end,
+        },
+      },
     },
   },
 }

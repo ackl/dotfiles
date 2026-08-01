@@ -1,7 +1,6 @@
 -- Experimental library of neovim plugins with a focus on performance and simplicity
 return { -- Autocompletion
   'saghen/blink.cmp',
-  build = 'cargo +nightly build --release',
   event = { 'InsertEnter', 'CmdlineEnter' },
   version = '1.*',
 

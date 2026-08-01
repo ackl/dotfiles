@@ -4,5 +4,5 @@ test.sh
 nvim
 
 spell/
-lazy-lock.json
 undodir
+lazy-lock.json

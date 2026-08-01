@@ -10,7 +10,7 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
 
     -- Useful status updates for LSP.
-    { 'j-hui/fidget.nvim',    opts = {} },
+    { 'j-hui/fidget.nvim', opts = {} },
 
     -- Allows extra capabilities provided by blink.cmp
     'saghen/blink.cmp',
@@ -148,23 +148,6 @@ return {
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
           end, '[T]oggle Inlay [H]ints')
         end
-
-        -- workaround for formatting w/ yamlls
-        -- FIXME: extract this from generic on_attach func and make configurable
-        -- see: https://github.com/LazyVim/LazyVim/commit/7f5051ef72cfe66eb50ddb7c973714aa8aea04ec
-        if client.name == 'yamlls' then
-          client.server_capabilities.documentFormattingProvider = true
-        end
-
-        -- autoformat on save
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_formatting, event.buf) then
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            buffer = event.buf,
-            callback = function()
-              vim.lsp.buf.format()
-            end,
-          })
-        end
       end,
     })
 
@@ -234,15 +217,18 @@ return {
         eslint = {},
         vtsls = {},
         yamlls = {
-          -- schemas for language server
-          schemas = {
-            ['http://json.schemastore.org/github-workflow'] = '.github/workflows/*.{yml,yaml}',
-            ['http://json.schemastore.org/github-action'] = '.github/action.{yml,yaml}',
-            ['http://json.schemastore.org/ansible-stable-2.9'] = 'roles/tasks/*.{yml,yaml}',
-            ['https://json.schemastore.org/dependabot-v2'] = '.github/dependabot.{yml,yaml}',
-            ['https://json.schemastore.org/gitlab-ci'] = '*gitlab-ci*.{yml,yaml}',
-            ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] =
-            '*compose*.{yml,yaml}',
+          settings = {
+            yaml = {
+              format = { enable = true },
+              schemas = {
+                ['http://json.schemastore.org/github-workflow'] = '.github/workflows/*.{yml,yaml}',
+                ['http://json.schemastore.org/github-action'] = '.github/action.{yml,yaml}',
+                ['http://json.schemastore.org/ansible-stable-2.9'] = 'roles/tasks/*.{yml,yaml}',
+                ['https://json.schemastore.org/dependabot-v2'] = '.github/dependabot.{yml,yaml}',
+                ['https://json.schemastore.org/gitlab-ci'] = '*gitlab-ci*.{yml,yaml}',
+                ['https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json'] = '*compose*.{yml,yaml}',
+              },
+            },
           },
           capabilities = {
             textDocument = {
@@ -250,11 +236,6 @@ return {
                 dynamicRegistration = false,
                 lineFoldingOnly = true,
               },
-            },
-          },
-          settings = {
-            format = {
-              enable = true,
             },
           },
         },
@@ -291,9 +272,14 @@ return {
       -- Structure is identical to the mason table from above.
       others = {
         -- dartls = {},
-        clangd = {},
       },
     }
+
+    -- Prefer the system clangd (Mason does not ship it for Linux ARM).
+    if vim.fn.executable 'clangd' == 1 then
+      servers.others.clangd = servers.mason.clangd
+      servers.mason.clangd = nil
+    end
 
     -- Ensure the servers and tools above are installed
     --
@@ -310,38 +296,31 @@ return {
     -- for you, so that they are available from within Neovim.
     local ensure_installed = vim.tbl_keys(servers.mason or {})
     vim.list_extend(ensure_installed, {
-      'stylua',  -- Used to format Lua code
-      'fixjson', -- Used to format HTML code
+      'stylua', -- Used to format Lua code
+      'fixjson', -- Used to format JSON code
+      'htmlbeautifier',
+      'prettier',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
     -- Either merge all additional server configs from the `servers.mason` and `servers.others` tables
     -- to the default language server configs as provided by nvim-lspconfig or
     -- define a custom server config that's unavailable on nvim-lspconfig.
+    local capabilities = require('blink.cmp').get_lsp_capabilities()
     for server, config in pairs(vim.tbl_extend('keep', servers.mason, servers.others)) do
-      if not vim.tbl_isempty(config) then
-        vim.lsp.config(server, config)
-      end
+      config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
+      vim.lsp.config(server, config)
     end
 
     -- After configuring our language servers, we now enable them
     require('mason-lspconfig').setup {
-      ensure_installed = {},   -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-      automatic_enable = true, -- automatically run vim.lsp.enable() for all servers that are installed via Mason
+      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+      automatic_enable = vim.tbl_keys(servers.mason), -- enable only our configured servers
     }
 
     -- Manually run vim.lsp.enable for all language servers that are *not* installed via Mason
     if not vim.tbl_isempty(servers.others) then
       vim.lsp.enable(vim.tbl_keys(servers.others))
     end
-
-    -- Installed LSPs are configured and enabled automatically with mason-lspconfig
-    -- The loop below is for overriding the default configuration of LSPs with the ones in the servers table
-    for server_name, config in pairs(servers) do
-      vim.lsp.config(server_name, config)
-    end
-
-    -- NOTE: Some servers may require an old setup until they are updated. For the full list refer here: https://github.com/neovim/nvim-lspconfig/issues/3705
-    -- These servers will have to be manually set up with require("lspconfig").server_name.setup{}
   end,
 }

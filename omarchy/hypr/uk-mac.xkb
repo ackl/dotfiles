@@ -1,0 +1,26 @@
+// UK Mac layout with Left Option support for € and #.
+// Keep Left Option as Alt elsewhere, including Alt-Tab and app shortcuts.
+xkb_keymap {
+  xkb_keycodes { include "evdev+aliases(qwerty)" };
+  xkb_types {
+    include "complete"
+    type "MAC_OPTION" {
+      modifiers = Shift+Mod1+LevelThree;
+      map[None] = Level1;
+      map[Shift] = Level2;
+      map[Mod1] = Level3;
+      map[LevelThree] = Level3;
+      map[Mod1+LevelThree] = Level3;
+      map[Shift+Mod1] = Level4;
+      map[Shift+LevelThree] = Level4;
+      map[Shift+Mod1+LevelThree] = Level4;
+    };
+  };
+  xkb_compat { include "complete" };
+  xkb_symbols {
+    include "pc+gb(mac)+inet(evdev)+group(alt_shift_toggle)"
+    key <AE02> { type[Group1] = "MAC_OPTION" };
+    key <AE03> { type[Group1] = "MAC_OPTION" };
+  };
+  xkb_geometry { include "pc(pc105)" };
+};

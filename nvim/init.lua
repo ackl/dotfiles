@@ -12,7 +12,8 @@ vim.o.mouse = 'a'
 vim.o.showmode = false
 vim.o.breakindent = true
 vim.o.undofile = true
-vim.o.undodir = os.getenv 'HOME' .. '/.config/nvim/undodir'
+vim.o.undodir = vim.fn.stdpath 'state' .. '/undo'
+vim.fn.mkdir(vim.o.undodir, 'p')
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.signcolumn = 'yes'
@@ -27,6 +28,7 @@ vim.o.confirm = true
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+require('config.remote_clipboard').setup()
 vim.o.clipboard = 'unnamedplus'
 
 --------------------------------
