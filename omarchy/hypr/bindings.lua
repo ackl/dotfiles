@@ -75,3 +75,31 @@ o.bind("SUPER + T", "Send Ctrl-T", function()
     hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL", key = "T", state = "up" }))
   end, { timeout = 50, type = "oneshot" })
 end)
+
+-- Send the application's Ctrl-A shortcut (usually Select All).
+hl.unbind("SUPER + A")
+o.bind("SUPER + A", "Send Ctrl-A", function()
+  hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL", key = "A", state = "down" }))
+  hl.timer(function()
+    hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL", key = "A", state = "up" }))
+  end, { timeout = 50, type = "oneshot" })
+end)
+
+-- Reopen a closed tab using the application's Ctrl-Shift-T shortcut.
+hl.unbind("SUPER + SHIFT + T")
+o.bind("SUPER + SHIFT + T", "Send Ctrl-Shift-T", function()
+  hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL SHIFT", key = "T", state = "down" }))
+  hl.timer(function()
+    hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL SHIFT", key = "T", state = "up" }))
+  end, { timeout = 50, type = "oneshot" })
+end)
+
+-- Super-W sends the application's close-tab shortcut instead of closing the
+-- window directly. Super-Q retains Omarchy's close-window binding.
+hl.unbind("SUPER + W")
+o.bind("SUPER + W", "Send Ctrl-W", function()
+  hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL", key = "W", state = "down" }))
+  hl.timer(function()
+    hl.dispatch(hl.dsp.send_key_state({ mods = "CTRL", key = "W", state = "up" }))
+  end, { timeout = 50, type = "oneshot" })
+end)

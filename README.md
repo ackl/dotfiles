@@ -21,11 +21,12 @@ repo's Git config as-is, backing up the old config rather than merging it.
 Both profiles share a portable Zsh config with OS-specific `ls` aliases and pnpm
 paths, optional Homebrew detection, and lazy NVM loading from `$NVM_DIR` or
 Homebrew. Existing `NVM_DIR`, `XDG_CONFIG_HOME`, and `PNPM_HOME` settings are
-preserved. Oh My Zsh is optional; without it, standard Zsh completion is enabled.
+preserved. `nvm_off` deactivates NVM while retaining later changes to `PATH`, such
+as an activated Python environment. Oh My Zsh is optional; without it, standard Zsh completion is enabled.
 Install Zellij on `PATH` for the `tmux` alias. The installer does not install Zsh,
 shell tools, or change your login shell.
 
-Profiles must be used alone. Individual selections remain available:
+Choose one profile, optionally with `--dry-run`. Individual selections remain available:
 
 ```sh
 ./link_configs.sh nvim omarchy
@@ -48,9 +49,30 @@ platforms; use an OS profile for normal installation. The legacy `i3` and
 
 Existing destinations are moved into a unique backup directory under
 `${XDG_STATE_HOME:-~/.local/state}/dotfiles/backups`; each backup path is printed.
-Already-correct links and identical copies are skipped. To restore, remove the
-installed link or move the installed copy aside, then move the backup to its
-original path.
+Already-correct links and identical copies are skipped. An Omarchy destination
+that is still a symlink is backed up and replaced with a copy, even if it points
+at this repository. Every installation that changes files records their original
+paths in `manifest.tsv`, including destinations that did not previously exist.
+
+Preview an installation or restore without changing files:
+
+```sh
+./link_configs.sh --dry-run --linux
+./link_configs.sh --dry-run --restore /path/to/backup-directory
+./link_configs.sh --restore /path/to/backup-directory
+```
+
+Use the backup directory printed by the installer and the same `HOME` and
+`XDG_CONFIG_HOME` values as the original installation. Restore moves old files
+back, removes destinations that were originally absent, and preserves current
+files in a unique `restored-current.*` directory inside that backup. A completed
+restore cannot be run twice. Backups made before manifests were introduced must
+be restored manually. If installation fails or is interrupted, the destination
+being installed is rolled back immediately; earlier successful changes can be
+undone with `--restore`.
+Any partial copy is preserved in the backup with a `.partial` suffix. Restore
+is sequential; if interrupted, inspect the original backup and its preserved
+current files before completing recovery manually.
 
 Omarchy files are copied for compatibility with plugin validation, watchers and
 config writers. Reinstall the `omarchy` selection after editing the repo. Copy

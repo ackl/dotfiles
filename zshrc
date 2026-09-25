@@ -88,7 +88,6 @@ path_append "$HOME/.lmstudio/bin"
 
 # ---- lazy nvm ------------------------------------------------------------------
 typeset -gi __NVM_LOADED=0
-typeset -g __NVM_SAVED_PATH=""
 
 nvm_on() {
   (( __NVM_LOADED )) && return 0
@@ -102,7 +101,6 @@ nvm_on() {
     return 127
   fi
 
-  __NVM_SAVED_PATH="$PATH"
   # Remove the wrapper so it cannot be mistaken for a successfully loaded NVM.
   unfunction nvm 2>/dev/null
   source "$nvm_script"
@@ -125,8 +123,8 @@ nvm_on() {
 nvm_off() {
   (( __NVM_LOADED )) || return 0
 
-  export PATH="$__NVM_SAVED_PATH"
-  unset NVM_BIN NVM_INC
+  # Let NVM remove its own paths without undoing later environment changes.
+  nvm deactivate --silent || return $?
   functions[nvm]=$functions[__nvm_lazy]
 
   __NVM_LOADED=0
